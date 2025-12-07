@@ -13,6 +13,8 @@ import Students from './pages/Students';
 import Curriculum from './pages/Curriculum';
 import TeacherAssignments from './pages/TeacherAssignments';
 import StudentAssignments from './pages/StudentAssignments';
+import ClassSchedule from './pages/ClassSchedule';
+import StudentProfile from './pages/StudentProfile'
 
 function App() {
   return (
@@ -44,11 +46,11 @@ function App() {
         {/* ALL STUDENT/PARENT PAGES THAT SHARE STUDENT LAYOUT */}
         <Route element={<StudentLayout />}>
           <Route path="/student-dashboard" element={<StudentDashboard />} />
-          <Route path="/student/schedule" element={<div className="p-6"><h2 className="text-2xl font-bold mb-4">Class Schedule</h2><p className="text-gray-600">Full weekly schedule will be displayed here</p></div>} />
+          <Route path="/student/schedule" element={<ClassSchedule />} />
           <Route path="/student/attendance" element={<div className="p-6"><h2 className="text-2xl font-bold mb-4">Attendance Records</h2><p className="text-gray-600">Detailed attendance history will be displayed here</p></div>} />
           <Route path="/student/grades" element={<div className="p-6"><h2 className="text-2xl font-bold mb-4">My Grades</h2><p className="text-gray-600">All grades and marks will be displayed here</p></div>} />
           <Route path="/student/assignments" element={<StudentAssignments />} />
-          <Route path="/student/profile" element={<div className="p-6"><h2 className="text-2xl font-bold mb-4">My Profile</h2><p className="text-gray-600">Student profile information will be displayed here</p></div>} />
+          <Route path="/student/profile" element={<StudentProfile />} />
         </Route>
 
       </Routes>

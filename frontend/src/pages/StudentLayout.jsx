@@ -98,9 +98,11 @@ export default function StudentLayout() {
                 <div className="text-sm font-medium">{user?.name || 'Student'}</div>
                 <div className="text-xs text-gray-500">{user?.email || 'student@school.com'}</div>
               </div>
+              <Link to="/student/profile">
               <div className="w-9 h-9 rounded-full bg-indigo-300 flex items-center justify-center">
                 {user?.name?.charAt(0)?.toUpperCase() || 'S'}
               </div>
+              </Link>
             </div>
 
             <button 
