@@ -29,6 +29,9 @@ const Login = () => {
                 else if(response.data.user.role === "teacher"){
                     navigate('/teacher-dashboard')
                 }
+                else if(response.data.user.role === "student" || response.data.user.role === "parent"){
+                    navigate('/student-dashboard')
+                }
                 else{
                     navigate('/employee-dashboard')
                 }
@@ -46,7 +49,7 @@ const Login = () => {
     return (
         <div className="flex flex-col items-center h-screen justify-center bg-linear-to-b from-teal-600 from-50% to-gray-100 to-50% space-y-6">
       
-            <h2 className="font-sevillana text-3xl text-white">Employee Management System</h2>
+            <h2 className="font-sevillana text-3xl text-white">Student Management System</h2>
       
             <div className="border shadow p-6 w-80 bg-white rounded-md">
                 <h2 className="text-2xl font-bold mb-4">Login</h2>

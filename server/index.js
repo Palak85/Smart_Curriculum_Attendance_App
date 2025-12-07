@@ -41,12 +41,18 @@
 
 import express from "express"
 import cors from "cors"
+import path from "path"
+import { fileURLToPath } from "url"
 import connectToDatabase from "./db/db.js"
 import authRoutes from "./routes/auth.js"
 import dotenv from "dotenv"
 import studentRoutes from "./routes/studentRoutes.js";
 import teacherRoutes from "./routes/teacherRoutes.js";
 import classesRoute from "./routes/classes.js";
+import assignmentRoutes from "./routes/assignmentRoutes.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config()
 
@@ -60,12 +66,16 @@ app.use(cors({
 
 app.use(express.json())
 
+// Serve static files from uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 connectToDatabase()
 
 app.use("/api/auth", authRoutes)
 app.use("/api/students", studentRoutes);
 app.use("/api/teachers", teacherRoutes);
 app.use("/api/classes", classesRoute);
+app.use("/api/assignments", assignmentRoutes);
 
 
 app.listen(process.env.PORT, () => {
