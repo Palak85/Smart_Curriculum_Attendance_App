@@ -1,43 +1,3 @@
-// import express from 'express'
-// import cors from 'cors'
-// import authRouter from './routes/auth.js'
-// import connectToDatabase from './db/db.js'
-
-
-// connectToDatabase()
-
-// const app = express()
-// app.use(cors())
-// app.use(express.json())
-// app.use('/api/auth',authRouter)
-
-// app.listen(process.env.PORT, ()=>{
-//     console.log(`Server is Running on port ${process.env.PORT}`)
-// })
-
-
-
-// import express from "express";
-// import connectToDatabase from "./db/db.js"
-// import dotenv from "dotenv"
-// import authRoutes from './routes/auth.js';
-
-
-// dotenv.config();
-// const app = express();
-// app.use(express.json());
-
-// connectToDatabase();   // ✅ THIS MUST COME BEFORE ROUTES
-
-// // import userRoutes from "./routes/userRoutes.js";
-// app.use("/api/users", authRoutes);
-
-// app.listen(process.env.PORT, () => {
-//     console.log("Server running on port", process.env.PORT);
-// });
-
-
-
 
 import express from "express"
 import cors from "cors"
@@ -50,6 +10,7 @@ import studentRoutes from "./routes/studentRoutes.js";
 import teacherRoutes from "./routes/teacherRoutes.js";
 import classesRoute from "./routes/classes.js";
 import assignmentRoutes from "./routes/assignmentRoutes.js";
+import adminSettingsRoutes from "./routes/adminSettings.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -76,6 +37,7 @@ app.use("/api/students", studentRoutes);
 app.use("/api/teachers", teacherRoutes);
 app.use("/api/classes", classesRoute);
 app.use("/api/assignments", assignmentRoutes);
+app.use("/api/admin/settings", adminSettingsRoutes);
 
 
 app.listen(process.env.PORT, () => {

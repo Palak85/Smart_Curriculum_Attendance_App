@@ -2,15 +2,17 @@ import React, { useState } from "react";
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import { Bell, Search, LogOut, Menu } from "lucide-react";
 import { useAuth } from "../context/authContext";
+import { useSchoolSettings } from "../context/SchoolSettingsContext";
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { settings } = useSchoolSettings();   // ✅ YAHAN hook call karo
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
@@ -40,7 +42,9 @@ export default function AdminLayout() {
             Teachers
           </Link>
           <a className="block px-3 py-2 rounded hover:bg-indigo-50">Attendance</a>
-          <a className="block px-3 py-2 rounded hover:bg-indigo-50">Settings</a>
+          <Link to="/admin/settings" className="block px-3 py-2 rounded hover:bg-indigo-50">
+            Settings
+          </Link>
         </nav>
       </aside>
 
@@ -62,12 +66,19 @@ export default function AdminLayout() {
                 S
               </div>
               <div>
-                <div className="font-semibold">Smart School</div>
-                <div className="text-xs text-gray-500">Admin Dashboard</div>
+                {/* ✅ Yahan sirf TEXT render karo, object nahi */}
+                <div className="font-semibold">
+                  {settings?.schoolName || "Smart School"}
+                </div>
+                {/* <div className="text-xs text-gray-500">Admin Dashboard</div> */}
+                <div className="text-xs text-gray-500">
+                Admin Dashboard · {settings?.academicYear || "2024-25"}
+                </div>
               </div>
             </div>
           </div>
 
+          {/* RIGHT SIDE OF HEADER SAME AS BEFORE */}
           <div className="flex items-center gap-4">
             <div className="relative hidden md:block">
               <input
@@ -88,18 +99,17 @@ export default function AdminLayout() {
 
             <div className="flex items-center gap-3">
               <div className="text-right mr-2">
-                <div className="text-sm font-medium">{user?.name || 'Admin'}</div>
-                <div className="text-xs text-gray-500">{user?.email || 'admin@school.com'}</div>
+                <div className="text-sm font-medium">{user?.name || "Admin"}</div>
+                <div className="text-xs text-gray-500">
+                  {user?.email || "admin@school.com"}
+                </div>
               </div>
               <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center">
-                {user?.name?.charAt(0)?.toUpperCase() || 'A'}
+                {user?.name?.charAt(0)?.toUpperCase() || "A"}
               </div>
             </div>
 
-            <button 
-              className="p-2 rounded hover:bg-gray-100"
-              onClick={handleLogout}
-            >
+            <button className="p-2 rounded hover:bg-gray-100" onClick={handleLogout}>
               <LogOut size={18} />
             </button>
           </div>
@@ -110,10 +120,24 @@ export default function AdminLayout() {
           <Outlet />
         </main>
 
-        {/* FOOTER (now global for all admin pages) */}
-        <footer className="mt-4 py-4 text-center text-xs text-gray-500 border-t bg-white">
-          © {new Date().getFullYear()} Smart School — All rights reserved
-        </footer>
+        {/* <footer className="mt-4 py-4 text-center text-xs text-gray-500 border-t bg-white">
+          © {new Date().getFullYear()} {settings?.schoolName || "Smart School"} — All rights reserved
+        </footer> */}
+        {/* <footer className="mt-4 py-4 text-center text-xs text-gray-500 border-t bg-white">
+          © {new Date().getFullYear()} {settings?.schoolName || "Smart School"} — All rights reserved
+        </footer> */}
+
+      <footer className="mt-4 py-4 text-center text-xs text-gray-600 border-t bg-white">
+        <div className="font-semibold text-gray-700">
+        © {new Date().getFullYear()} {settings?.schoolName || "Smart School"}
+        </div>
+        <div className="mt-1 text-gray-500">
+          <b>Adress: </b> {settings?.address || "School Address"} • 
+          <b>Email: </b>  {settings?.email || "info@school.com"} • 
+          <b>Phone: </b>  {settings?.contactNumber || "+91-0000000000"}
+        </div>
+      </footer>
+
       </div>
     </div>
   );

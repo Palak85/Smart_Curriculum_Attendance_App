@@ -1,161 +1,147 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, CartesianGrid } from 'recharts'
-
-const kpiData = [
-  { id: 1, title: "Total Students", value: 1240 },
-  { id: 2, title: "Total Teachers", value: 72 },
-  { id: 3, title: "Today's Attendance", value: '92%' },
-  { id: 4, title: "Ongoing Activities", value: 6 }
-]
-
-const attendanceSeries = [
-  { day: 'Mon', attendance: 90 },
-  { day: 'Tue', attendance: 92 },
-  { day: 'Wed', attendance: 88 },
-  { day: 'Thu', attendance: 94 },
-  { day: 'Fri', attendance: 91 },
-  { day: 'Sat', attendance: 85 }
-]
-
-const activitySeries = [
-  { name: 'Sports', participants: 120 },
-  { name: 'Arts', participants: 85 },
-  { name: 'Music', participants: 60 },
-  { name: 'Robotics', participants: 40 }
-]
-
-const recentStudents = [
-  { id: 'S1001', name: 'Aanya Sharma', class: '5-A', attendance: 'Present' },
-  { id: 'S1002', name: 'Rohan Verma', class: '6-B', attendance: 'Absent' },
-  { id: 'S1003', name: 'Maya Gupta', class: '4-C', attendance: 'Present' },
-  { id: 'S1004', name: 'Arjun Singh', class: '7-A', attendance: 'Present' }
-]
+import { useAuth } from '../context/authContext'
+import axios from 'axios'
+import { Users, UserCheck, BookOpen, Settings } from 'lucide-react'
 
 export default function AdminDashboard() {
   const navigate = useNavigate()
+  const { user } = useAuth()
+  const [stats, setStats] = useState({
+    totalStudents: 0,
+    totalTeachers: 0,
+    totalClasses: 0
+  })
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    loadStats()
+  }, [])
+
+  const loadStats = async () => {
+    try {
+      setLoading(true)
+      const [studentsRes, teachersRes, classesRes] = await Promise.all([
+        axios.get('http://localhost:3000/api/students'),
+        axios.get('http://localhost:3000/api/teachers'),
+        axios.get('http://localhost:3000/api/classes')
+      ])
+
+      setStats({
+        totalStudents: studentsRes.data.students?.length || 0,
+        totalTeachers: teachersRes.data.teachers?.length || 0,
+        totalClasses: classesRes.data.classes?.length || 0
+      })
+    } catch (err) {
+      console.error('Error loading stats:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleAddStudent = () => {
-    // change '/students' to whatever route your StudentsPage uses
     navigate('/student')
   }
 
   const handleAddTeacher = () => {
-    // optional: navigate to teachers page
     navigate('/teacher')
+  }
+
+  const handleManageClasses = () => {
+    navigate('/classes')
   }
 
   return (
     <div className="text-gray-800">
+      {/* Welcome Section */}
+      <section className="mb-6">
+        <h1 className="text-3xl font-bold mb-2">Welcome, {user?.name || 'Admin'}!</h1>
+        <p className="text-gray-600">Manage your school system from here</p>
+      </section>
+
       {/* KPI CARDS */}
-      <section className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        {kpiData.map(kpi => (
-          <div key={kpi.id} className="bg-white p-4 rounded-lg shadow-sm">
-            <div className="text-sm text-gray-500">{kpi.title}</div>
-            <div className="text-2xl font-semibold mt-2">{kpi.value}</div>
-          </div>
-        ))}
-      </section>
-
-      {/* CHARTS */}
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        {/* Attendance Chart */}
-        <div className="col-span-2 bg-white p-4 rounded-lg shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold">Attendance (Weekly)</h3>
-            <div className="text-sm text-gray-500">Last 7 days</div>
-          </div>
-
-          <div style={{ width: '100%', height: 220 }}>
-            <ResponsiveContainer>
-              <LineChart data={attendanceSeries}>
-                <XAxis dataKey="day" />
-                <YAxis />
-                <Tooltip />
-                <Line type="monotone" dataKey="attendance" stroke="#6366F1" strokeWidth={3} />
-              </LineChart>
-            </ResponsiveContainer>
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="bg-white p-6 rounded-lg shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm text-gray-500 mb-1">Total Students</div>
+              <div className="text-3xl font-semibold">
+                {loading ? '...' : stats.totalStudents}
+              </div>
+            </div>
+            <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+              <Users size={24} className="text-indigo-600" />
+            </div>
           </div>
         </div>
 
-        {/* Activity Chart */}
-        <div className="bg-white p-4 rounded-lg shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold">Activity Participation</h3>
-            <div className="text-sm text-gray-500">This month</div>
+        <div className="bg-white p-6 rounded-lg shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm text-gray-500 mb-1">Total Teachers</div>
+              <div className="text-3xl font-semibold">
+                {loading ? '...' : stats.totalTeachers}
+              </div>
+            </div>
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <UserCheck size={24} className="text-green-600" />
+            </div>
           </div>
+        </div>
 
-          <div style={{ width: '100%', height: 220 }}>
-            <ResponsiveContainer>
-              <BarChart data={activitySeries}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="participants" barSize={20} fill="#6366F1" />
-              </BarChart>
-            </ResponsiveContainer>
+        <div className="bg-white p-6 rounded-lg shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm text-gray-500 mb-1">Total Classes</div>
+              <div className="text-3xl font-semibold">
+                {loading ? '...' : stats.totalClasses}
+              </div>
+            </div>
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <BookOpen size={24} className="text-blue-600" />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* RECENT STUDENTS TABLE + QUICK ACTIONS */}
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="col-span-2 bg-white p-4 rounded-lg shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold">Recent Student Attendance</h3>
-            <div className="text-sm text-gray-500">Today</div>
+      {/* QUICK ACTIONS */}
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={handleAddStudent}>
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+              <Users size={24} className="text-indigo-600" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-lg">Manage Students</h3>
+              <p className="text-sm text-gray-600">Add, edit, or remove students</p>
+            </div>
           </div>
-
-          <table className="min-w-full text-sm">
-            <thead>
-              <tr className="text-left text-gray-500">
-                <th className="py-2">ID</th>
-                <th className="py-2">Name</th>
-                <th className="py-2">Class</th>
-                <th className="py-2">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentStudents.map(s => (
-                <tr key={s.id} className="border-t">
-                  <td className="py-2">{s.id}</td>
-                  <td className="py-2">{s.name}</td>
-                  <td className="py-2">{s.class}</td>
-                  <td className={`py-2 font-medium ${s.attendance === 'Present' ? 'text-green-600' : 'text-red-600'}`}>
-                    {s.attendance}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
 
-        {/* QUICK ACTIONS */}
-        <div className="bg-white p-4 rounded-lg shadow-sm">
-          <h3 className="font-semibold mb-3">Quick Actions</h3>
-          <div className="flex flex-col gap-2">
-            <button
-              className="py-2 px-3 rounded bg-indigo-600 text-white"
-              onClick={handleAddStudent}
-            >
-              Add Student
-            </button>
+        <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={handleAddTeacher}>
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <UserCheck size={24} className="text-green-600" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-lg">Manage Teachers</h3>
+              <p className="text-sm text-gray-600">Add, edit, or remove teachers</p>
+            </div>
+          </div>
+        </div>
 
-            <button
-              className="py-2 px-3 rounded bg-indigo-600 text-white"
-              onClick={handleAddTeacher}
-            >
-              Add Teacher
-            </button>
-
-            <button className="py-2 px-3 rounded border">Upload Curriculum</button>
-            <button className="py-2 px-3 rounded border">Create Activity</button>
+        <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer" onClick={handleManageClasses}>
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <BookOpen size={24} className="text-blue-600" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-lg">Manage Classes</h3>
+              <p className="text-sm text-gray-600">Create classes and sections</p>
+            </div>
           </div>
         </div>
       </section>
-
-      
     </div>
   )
 }

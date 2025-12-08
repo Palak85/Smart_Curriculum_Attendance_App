@@ -15,6 +15,7 @@ import TeacherAssignments from './pages/TeacherAssignments';
 import StudentAssignments from './pages/StudentAssignments';
 import ClassSchedule from './pages/ClassSchedule';
 import StudentProfile from './pages/StudentProfile'
+import AdminSettings from './pages/AdminSettings';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/classes" element={<ClassesSections />} />
           <Route path="/student" element={<Students />} />
           <Route path="/curriculum" element={<Curriculum />} />
+          <Route path="/admin/settings" element={<AdminSettings />} />
         </Route>
 
         {/* ALL TEACHER PAGES THAT SHARE TEACHER LAYOUT */}
