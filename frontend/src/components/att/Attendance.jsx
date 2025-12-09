@@ -1,124 +1,269 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Users, CheckCircle, XCircle } from "lucide-react";
 
 const Attendance = () => {
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(() => new Date().toISOString().split("T")[0]);
+  const [classes, setClasses] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [students, setStudents] = useState([]);
+  const [form, setForm] = useState({ class: "", section: "" });
   const [attendance, setAttendance] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
 
-  // Example students list (replace with DB later if needed)
-  const students = [
-    { id: "1", name: "Aman Sharma" },
-    { id: "2", name: "Priya Singh" },
-    { id: "3", name: "Rohit Verma" },
-  ];
+  useEffect(() => {
+    loadClasses();
+  }, []);
 
-  // Mark attendance in local state
-  const markAttendance = (studentId, status) => {
-    setAttendance((prev) => ({
-      ...prev,
-      [studentId]: status,
-    }));
+  useEffect(() => {
+    if (form.class) {
+      const cls = classes.find((c) => c.className === form.class);
+      setSections(cls ? cls.sections : []);
+    } else {
+      setSections([]);
+    }
+  }, [form.class, classes]);
+
+  const loadClasses = async () => {
+    try {
+      const res = await axios.get("http://localhost:3000/api/classes");
+      setClasses(res.data.classes || []);
+    } catch (err) {
+      console.error("Error loading classes", err);
+    }
   };
 
-  // Save attendance to backend
-  const handleSubmit = async () => {
-    if (!date) {
-      setMessage("⚠ Please select a date");
+  const loadStudents = async () => {
+    if (!form.class || !form.section) {
+      setMessage("Please select class and section");
       return;
     }
-
-    if (Object.keys(attendance).length === 0) {
-      setMessage("⚠ Please mark attendance for at least one student");
-      return;
-    }
-
-    const records = students.map((student) => ({
-      studentId: student.id,
-      name: student.name,
-      status: attendance[student.id] || "Absent", // Default Absent
-    }));
-
     try {
-      const response = await axios.post("http://localhost:3000/api/attendance/save", {
-        date,
-        records,
+      setLoading(true);
+      setMessage("");
+      const res = await axios.get("http://localhost:3000/api/students");
+      const filtered = (res.data.students || []).filter(
+        (s) => s.class === form.class && s.section === form.section
+      );
+      setStudents(filtered);
+      const defaultAttendance = {};
+      filtered.forEach((s) => {
+        defaultAttendance[s._id] = "Present";
       });
+      setAttendance(defaultAttendance);
+    } catch (err) {
+      console.error("Error loading students", err);
+      setMessage("Failed to load students");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      if (response.data.success) {
-        setMessage("✅ Attendance saved successfully!");
-        alert("Attendance Marked ")
+  const markAttendance = (studentId, status) => {
+    setAttendance((prev) => ({ ...prev, [studentId]: status }));
+  };
+
+  const setAll = (status) => {
+    const updated = {};
+    students.forEach((s) => {
+      updated[s._id] = status;
+    });
+    setAttendance(updated);
+  };
+
+  const handleSubmit = async () => {
+    if (!date || !form.class || !form.section) {
+      setMessage("Please select date, class and section");
+      return;
+    }
+    if (students.length === 0) {
+      setMessage("No students found for selected class/section");
+      return;
+    }
+    try {
+      setSaving(true);
+      const token = localStorage.getItem("token");
+      const records = students.map((s) => ({
+        studentId: s._id,
+        name: s.name,
+        roll: s.roll,
+        class: s.class,
+        section: s.section,
+        status: attendance[s._id] || "Absent",
+      }));
+      const res = await axios.post(
+        "http://localhost:3000/api/attendance/mark",
+        {
+          date,
+          class: form.class,
+          section: form.section,
+          records,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (res.data.success) {
+        setMessage("Attendance saved successfully");
       } else {
-        setMessage("⚠ " + response.data.message);
+        setMessage(res.data.message || "Failed to save attendance");
       }
-    } catch (error) {
-      setMessage("❌ Server error while saving attendance");
+    } catch (err) {
+      console.error("Save attendance error", err);
+      setMessage("Failed to save attendance");
+    } finally {
+      setSaving(false);
     }
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-center">Mark Attendance</h1>
-
-      {/* DATE SELECTOR */}
-      <div className="mb-6">
-        <label className="block mb-2 text-lg font-semibold">Select Date:</label>
-        <input
-          type="date"
-          className="px-3 py-2 border rounded w-60"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
+    <div className="p-6 bg-gray-50 min-h-screen text-gray-800">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold mb-1">Attendance</h1>
+          <p className="text-gray-600">Fetch students and mark attendance</p>
+        </div>
+        <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-lg shadow-sm">
+          <Users size={20} className="text-indigo-600" />
+          <span className="font-semibold">{students.length} students</span>
+        </div>
       </div>
 
-      {/* MESSAGE */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div>
+          <label className="block text-sm font-medium mb-1">Date</label>
+          <input
+            type="date"
+            className="w-full p-2 border rounded-lg"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1">Class</label>
+          <select
+            className="w-full p-2 border rounded-lg"
+            value={form.class}
+            onChange={(e) => setForm({ ...form, class: e.target.value, section: "" })}
+          >
+            <option value="">Select Class</option>
+            {classes.map((c) => (
+              <option key={c._id} value={c.className}>
+                {c.className}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1">Section</label>
+          <select
+            className="w-full p-2 border rounded-lg"
+            value={form.section}
+            onChange={(e) => setForm({ ...form, section: e.target.value })}
+            disabled={!form.class}
+          >
+            <option value="">Select Section</option>
+            {sections.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex items-end">
+          <button
+            onClick={loadStudents}
+            className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700"
+          >
+            Load Students
+          </button>
+        </div>
+      </div>
+
       {message && (
-        <p className="mb-4 text-center font-semibold text-red-600">{message}</p>
+        <div className="mb-4 px-4 py-3 rounded bg-yellow-100 text-yellow-800 border border-yellow-200">
+          {message}
+        </div>
       )}
 
-      {/* STUDENTS LIST */}
-      <div className="bg-white p-4 rounded shadow-md">
-        {students.map((student) => (
-          <div
-            key={student.id}
-            className="flex justify-between p-3 border-b items-center"
-          >
-            <p className="text-lg">{student.name}</p>
-
-            <div className="flex gap-3">
+      {loading ? (
+        <div className="bg-white p-6 rounded-lg shadow-sm text-center text-gray-500">
+          Loading students...
+        </div>
+      ) : students.length === 0 ? (
+        <div className="bg-white p-6 rounded-lg shadow-sm text-center text-gray-500">
+          No students loaded. Select class & section and click Load Students.
+        </div>
+      ) : (
+        <div className="bg-white p-4 rounded-lg shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold text-lg">Students</h3>
+            <div className="flex gap-2">
               <button
-                onClick={() => markAttendance(student.id, "Present")}
-                className={`px-4 py-1 rounded ${
-                  attendance[student.id] === "Present"
-                    ? "bg-green-500 text-white"
-                    : "bg-green-200"
-                }`}
+                onClick={() => setAll("Present")}
+                className="px-3 py-1 rounded bg-green-100 text-green-700 text-sm"
               >
-                Present
+                Mark All Present
               </button>
-
               <button
-                onClick={() => markAttendance(student.id, "Absent")}
-                className={`px-4 py-1 rounded ${
-                  attendance[student.id] === "Absent"
-                    ? "bg-red-500 text-white"
-                    : "bg-red-200"
-                }`}
+                onClick={() => setAll("Absent")}
+                className="px-3 py-1 rounded bg-red-100 text-red-700 text-sm"
               >
-                Absent
+                Mark All Absent
               </button>
             </div>
           </div>
-        ))}
-      </div>
 
-      {/* SUBMIT */}
-      <button
-        onClick={handleSubmit}
-        className="mt-6 w-full bg-blue-600 text-white py-2 rounded"
-      >
-        Submit Attendance
-      </button>
+          <div className="divide-y">
+            {students.map((s) => (
+              <div key={s._id} className="py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                <div>
+                  <div className="font-semibold">{s.name}</div>
+                  <div className="text-sm text-gray-500">
+                    Roll: {s.roll} · Class: {s.class}-{s.section}
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => markAttendance(s._id, "Present")}
+                    className={`px-4 py-2 rounded flex items-center gap-2 ${
+                      attendance[s._id] === "Present"
+                        ? "bg-green-600 text-white"
+                        : "bg-green-100 text-green-700"
+                    }`}
+                  >
+                    <CheckCircle size={16} />
+                    Present
+                  </button>
+                  <button
+                    onClick={() => markAttendance(s._id, "Absent")}
+                    className={`px-4 py-2 rounded flex items-center gap-2 ${
+                      attendance[s._id] === "Absent"
+                        ? "bg-red-600 text-white"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    <XCircle size={16} />
+                    Absent
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-4 flex justify-end">
+            <button
+              onClick={handleSubmit}
+              disabled={saving}
+              className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50"
+            >
+              {saving ? "Saving..." : "Save Attendance"}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
