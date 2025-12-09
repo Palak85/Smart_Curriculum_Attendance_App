@@ -46,6 +46,14 @@ export default function TeacherLayout() {
             <BookOpen size={16} />
             Grades
           </Link>
+          <Link to="/teacher/apply-leave" className="block px-3 py-2 rounded hover:bg-indigo-50 flex items-center gap-2">
+            <Calendar size={16} />
+            Apply Leave
+          </Link>
+          <Link to="/teacher/check-leave-status" className="block px-3 py-2 rounded hover:bg-indigo-50 flex items-center gap-2">
+            <Calendar size={16} />
+            Check Leave Status
+          </Link>
         </nav>
       </aside>
 

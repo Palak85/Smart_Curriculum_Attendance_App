@@ -30,7 +30,7 @@ export default function StudentLayout() {
             <BookOpen size={16} />
             Dashboard
           </Link>
-          <Link to="/student/schedule" className="block px-3 py-2 rounded hover:bg-indigo-50 flex items-center gap-2">
+          <Link to="/student/schedule" className="block px-3 py-2 rounded hover:bg-indigo-50  items-center gap-2">
             <Calendar size={16} />
             Class Schedule
           </Link>

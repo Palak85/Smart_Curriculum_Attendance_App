@@ -16,6 +16,10 @@ import StudentAssignments from './pages/StudentAssignments';
 import ClassSchedule from './pages/ClassSchedule';
 import StudentProfile from './pages/StudentProfile'
 import AdminSettings from './pages/AdminSettings';
+import Attendance from './components/att/Attendance';
+import ApplyLeave from './pages/ApplyLeave';
+import CheckLeaveStatus from './pages/CheckLeaveStatus';
+import ApproveLeaves from "./pages/ApproveLeaves";
 
 function App() {
   return (
@@ -34,15 +38,20 @@ function App() {
           <Route path="/student" element={<Students />} />
           <Route path="/curriculum" element={<Curriculum />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
+          <Route path="/approve-leaves" element={<ApproveLeaves />}/>
+          
         </Route>
 
         {/* ALL TEACHER PAGES THAT SHARE TEACHER LAYOUT */}
         <Route element={<TeacherLayout />}>
           <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
           <Route path="/teacher/classes" element={<div className="p-6"><h2 className="text-2xl font-bold">My Classes</h2></div>} />
-          <Route path="/teacher/attendance" element={<div className="p-6"><h2 className="text-2xl font-bold">Attendance</h2></div>} />
+          {/* <Route path="/teacher/attendance" element={<div className="p-6"><h2 className="text-2xl font-bold">Attendance</h2></div>} /> */}
           <Route path="/teacher/assignments" element={<TeacherAssignments />} />
           <Route path="/teacher/grades" element={<div className="p-6"><h2 className="text-2xl font-bold">Grades</h2></div>} />
+          <Route path="/teacher/attendance" element={<Attendance/>}/>
+          <Route path="teacher/apply-leave" element={<ApplyLeave/>}/>
+          <Route path="teacher/check-leave-status" element={<CheckLeaveStatus/>}></Route>
         </Route>
 
         {/* ALL STUDENT/PARENT PAGES THAT SHARE STUDENT LAYOUT */}

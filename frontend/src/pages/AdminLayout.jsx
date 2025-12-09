@@ -41,6 +41,9 @@ export default function AdminLayout() {
           <Link to="/teacher" className="block px-3 py-2 rounded hover:bg-indigo-50">
             Teachers
           </Link>
+          <Link to="/approve-leaves" className="block px-3 py-2 rounded hover:bg-indigo-50">
+            Approve Leave
+          </Link>
           <a className="block px-3 py-2 rounded hover:bg-indigo-50">Attendance</a>
           <Link to="/admin/settings" className="block px-3 py-2 rounded hover:bg-indigo-50">
             Settings
