@@ -5,6 +5,7 @@ const studentSchema = new mongoose.Schema({
   roll: { type: String, required: true },
   class: { type: String, required: true },
   section: { type: String, required: true },
+  email: { type: String, unique: true, sparse: true },
 });
 
 export default mongoose.model("Student", studentSchema);

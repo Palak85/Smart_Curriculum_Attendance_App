@@ -1,20 +1,50 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/authContext'
 import { Calendar, BookOpen, Award, Clock } from 'lucide-react'
+import axios from 'axios'
 
 const StudentDashboard = () => {
   const navigate = useNavigate()
   const { user } = useAuth()
-
-  // Mock data - in real app, this would come from API
-  const studentInfo = {
+  const [studentInfo, setStudentInfo] = useState({
     name: user?.name || 'Student Name',
-    roll: 'S1001',
-    class: '5-A',
-    section: 'A',
+    roll: '—',
+    class: '—',
+    section: '—',
     email: user?.email || 'student@school.com'
-  }
+  })
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchStudent = async () => {
+      try {
+        const token = localStorage.getItem('token')
+        if (!token) {
+          setLoading(false)
+          return
+        }
+        const res = await axios.get('http://localhost:3000/api/students/me', {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        if (res.data.success && res.data.student) {
+          const s = res.data.student
+          setStudentInfo({
+            name: s.name || user?.name || 'Student',
+            roll: s.roll || '—',
+            class: s.class || '—',
+            section: s.section || '—',
+            email: s.email || user?.email || '—'
+          })
+        }
+      } catch (err) {
+        console.error('Failed to fetch student profile', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchStudent()
+  }, [user])
 
   const attendanceStats = {
     present: 85,
@@ -52,8 +82,12 @@ const StudentDashboard = () => {
     <div className="text-gray-800">
       {/* Welcome Section */}
       <section className="mb-6">
-        <h1 className="text-3xl font-bold mb-2">Welcome, {studentInfo.name}!</h1>
-        <p className="text-gray-600">Here's your academic overview</p>
+        <h1 className="text-3xl font-bold mb-2">
+          Welcome, {loading ? 'Loading...' : studentInfo.name}!
+        </h1>
+        <p className="text-gray-600">
+          {loading ? 'Fetching your profile...' : "Here's your academic overview"}
+        </p>
       </section>
 
       {/* Student Info Card */}

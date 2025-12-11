@@ -259,7 +259,10 @@ export default function Students() {
     roll: "",
     class: "",
     section: "",
+    email: "",
+    password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const [editingStudent, setEditingStudent] = useState(null);
 
@@ -300,15 +303,16 @@ export default function Students() {
   };
 
   const addStudent = async () => {
-    if (!formData.name || !formData.roll || !formData.class || !formData.section)
-      return alert("All fields required!");
+    if (!formData.name || !formData.roll || !formData.class || !formData.section || !formData.email || !formData.password)
+      return alert("Name, roll, class, section, email and password are required");
 
     try {
       await axios.post("http://localhost:3000/api/students/add", formData);
-      setFormData({ name: "", roll: "", class: "", section: "" });
+      setFormData({ name: "", roll: "", class: "", section: "", email: "", password: "" });
       loadStudents();
     } catch (err) {
       console.error(err);
+      alert(err.response?.data?.message || "Failed to add student");
     }
   };
 
@@ -332,6 +336,8 @@ export default function Students() {
       roll: s.roll,
       class: s.class,
       section: s.section,
+      email: s.email || "",
+      password: "",
     });
   };
 
@@ -343,10 +349,11 @@ export default function Students() {
       );
 
       setEditingStudent(null);
-      setFormData({ name: "", roll: "", class: "", section: "" });
+      setFormData({ name: "", roll: "", class: "", section: "", email: "", password: "" });
       loadStudents();
     } catch (err) {
       console.error(err);
+      alert(err.response?.data?.message || "Failed to update student");
     }
   };
 
@@ -357,7 +364,8 @@ export default function Students() {
       s.name.toLowerCase().includes(searchLower) ||
       s.roll.toLowerCase().includes(searchLower) ||
       s.class.toLowerCase().includes(searchLower) ||
-      s.section.toLowerCase().includes(searchLower);
+      s.section.toLowerCase().includes(searchLower) ||
+      (s.email || "").toLowerCase().includes(searchLower);
 
     const matchesClass = filterClass ? s.class === filterClass : true;
 
@@ -413,6 +421,40 @@ export default function Students() {
           className="w-full p-2 mb-3 border rounded-lg"
         />
 
+        <input
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="Student Email (for login)"
+          className="w-full p-2 mb-3 border rounded-lg"
+        />
+
+        <div className="mb-3">
+          <div className="flex items-center gap-2">
+            <input
+              name="password"
+              type={showPassword ? "text" : "password"}
+              value={formData.password}
+              onChange={handleChange}
+              placeholder={editingStudent ? "New Password (optional)" : "Password (for login)"}
+              className="w-full p-2 border rounded-lg"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((p) => !p)}
+              className="px-3 py-2 border rounded-lg text-sm"
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
+          {formData.email && formData.password && (
+            <p className="text-xs text-gray-600 mt-1">
+              Email: {formData.email} | Password: {showPassword ? formData.password : "••••••"}
+            </p>
+          )}
+        </div>
+
         {/* CLASS DROPDOWN */}
         <select
           name="class"
@@ -456,7 +498,7 @@ export default function Students() {
             <button
               onClick={() => {
                 setEditingStudent(null);
-                setFormData({ name: "", roll: "", class: "", section: "" });
+                setFormData({ name: "", roll: "", class: "", section: "", email: "", password: "" });
               }}
               className="bg-gray-300 flex-1 p-2 rounded"
             >
