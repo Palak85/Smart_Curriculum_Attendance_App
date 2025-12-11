@@ -20,6 +20,9 @@ import Attendance from './components/att/Attendance';
 import ApplyLeave from './pages/ApplyLeave';
 import CheckLeaveStatus from './pages/CheckLeaveStatus';
 import ApproveLeaves from "./pages/ApproveLeaves";
+import TeacherGrades from "./pages/TeacherGrades";
+import StudentGrades from "./pages/StudentGrades";
+import StudentAttendance from './pages/StudentAttendance';
 
 function App() {
   return (
@@ -48,7 +51,7 @@ function App() {
           <Route path="/teacher/classes" element={<div className="p-6"><h2 className="text-2xl font-bold">My Classes</h2></div>} />
           {/* <Route path="/teacher/attendance" element={<div className="p-6"><h2 className="text-2xl font-bold">Attendance</h2></div>} /> */}
           <Route path="/teacher/assignments" element={<TeacherAssignments />} />
-          <Route path="/teacher/grades" element={<div className="p-6"><h2 className="text-2xl font-bold">Grades</h2></div>} />
+          <Route path="/teacher/grades" element={<TeacherGrades />} />
           <Route path="/teacher/attendance" element={<Attendance/>}/>
           <Route path="teacher/apply-leave" element={<ApplyLeave/>}/>
           <Route path="teacher/check-leave-status" element={<CheckLeaveStatus/>}></Route>
@@ -58,8 +61,9 @@ function App() {
         <Route element={<StudentLayout />}>
           <Route path="/student-dashboard" element={<StudentDashboard />} />
           <Route path="/student/schedule" element={<ClassSchedule />} />
-          <Route path="/student/attendance" element={<div className="p-6"><h2 className="text-2xl font-bold mb-4">Attendance Records</h2><p className="text-gray-600">Detailed attendance history will be displayed here</p></div>} />
-          <Route path="/student/grades" element={<div className="p-6"><h2 className="text-2xl font-bold mb-4">My Grades</h2><p className="text-gray-600">All grades and marks will be displayed here</p></div>} />
+          {/* <Route path="/student/attendance" element={<div className="p-6"><h2 className="text-2xl font-bold mb-4">Attendance Records</h2><p className="text-gray-600">Detailed attendance history will be displayed here</p></div>} /> */}
+          <Route path="/student/attendance" element={<StudentAttendance />} /> 
+          <Route path="/student/grades" element={<StudentGrades />} />
           <Route path="/student/assignments" element={<StudentAssignments />} />
           <Route path="/student/profile" element={<StudentProfile />} />
         </Route>

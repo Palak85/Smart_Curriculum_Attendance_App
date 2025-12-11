@@ -13,6 +13,7 @@ import assignmentRoutes from "./routes/assignmentRoutes.js";
 import adminSettingsRoutes from "./routes/adminSettings.js";
 import attendanceRoutes from "./routes/attendanceRoutes.js";
 import leaveRoutes from "./routes/leaveRoutes.js";
+import gradeRoutes from "./routes/gradeRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,6 +43,7 @@ app.use("/api/assignments", assignmentRoutes);
 app.use("/api/admin/settings", adminSettingsRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/leaves", leaveRoutes);
+app.use("/api/grades", gradeRoutes);
 
 
 app.listen(process.env.PORT, () => {
