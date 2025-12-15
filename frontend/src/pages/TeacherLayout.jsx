@@ -108,7 +108,7 @@ export default function TeacherLayout() {
             <div className="flex items-center gap-3">
               <div className="text-right mr-2">
                 <div className="text-sm font-medium">{user?.name || 'Teacher'}</div>
-                <div className="text-xs text-gray-500">{user?.email || 'teacher@school.com'}</div>
+                <div className="text-xs text-gray-500">{user?.email || 'teacher@gmail.com'}</div>
               </div>
               <div className="w-9 h-9 rounded-full bg-indigo-300 flex items-center justify-center">
                 {user?.name?.charAt(0)?.toUpperCase() || 'T'}

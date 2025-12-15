@@ -104,7 +104,7 @@ export default function StudentLayout() {
             <div className="flex items-center gap-3">
               <div className="text-right mr-2">
                 <div className="text-sm font-medium">{user?.name || 'Student'}</div>
-                <div className="text-xs text-gray-500">{user?.email || 'student@school.com'}</div>
+                <div className="text-xs text-gray-500">{user?.email || 'student@gmail.com'}</div>
               </div>
               <Link to="/student/profile">
               <div className="w-9 h-9 rounded-full bg-indigo-300 flex items-center justify-center">
@@ -112,7 +112,6 @@ export default function StudentLayout() {
               </div>
               </Link>
             </div>
-
             <button 
               className="p-2 rounded hover:bg-gray-100"
               onClick={handleLogout}

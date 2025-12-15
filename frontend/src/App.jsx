@@ -23,6 +23,7 @@ import ApproveLeaves from "./pages/ApproveLeaves";
 import TeacherGrades from "./pages/TeacherGrades";
 import StudentGrades from "./pages/StudentGrades";
 import StudentAttendance from './pages/StudentAttendance';
+import TeacherMyClass from './pages/TeacherMyClass';
 
 function App() {
   return (
@@ -48,7 +49,7 @@ function App() {
         {/* ALL TEACHER PAGES THAT SHARE TEACHER LAYOUT */}
         <Route element={<TeacherLayout />}>
           <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
-          <Route path="/teacher/classes" element={<div className="p-6"><h2 className="text-2xl font-bold">My Classes</h2></div>} />
+          <Route path="/teacher/classes" element={<TeacherMyClass />} />
           {/* <Route path="/teacher/attendance" element={<div className="p-6"><h2 className="text-2xl font-bold">Attendance</h2></div>} /> */}
           <Route path="/teacher/assignments" element={<TeacherAssignments />} />
           <Route path="/teacher/grades" element={<TeacherGrades />} />
