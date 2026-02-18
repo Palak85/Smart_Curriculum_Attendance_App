@@ -43,9 +43,6 @@ app.get("/api/health", (req, res) => {
 
 // Login endpoint alias (convenience)
 app.post("/api/login", login)
-app.get("/api/login", (req, res) => {
-    res.status(405).json({ success: false, error: "Use POST /api/login with body: { email, password }" })
-})
 
 app.use("/api/auth", authRoutes)
 app.use("/api/students", studentRoutes);
