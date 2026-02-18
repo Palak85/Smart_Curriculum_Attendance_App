@@ -28,9 +28,9 @@ const authContext = ({children}) => {
             }
             }
             catch(error){
-                if(error.response && !error.response.data.error){
-                    setUser(null)
-                }
+                // On any error during verify, treat user as unauthenticated
+                console.error('verifyUser error:', error?.response || error)
+                setUser(null)
             }
             finally{
                 setLoading(false)
