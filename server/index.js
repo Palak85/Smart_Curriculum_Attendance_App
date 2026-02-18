@@ -5,6 +5,7 @@ import path from "path"
 import { fileURLToPath } from "url"
 import connectToDatabase from "./db/db.js"
 import authRoutes from "./routes/auth.js"
+import { login } from "./controllers/authController.js"
 import dotenv from "dotenv"
 import studentRoutes from "./routes/studentRoutes.js";
 import teacherRoutes from "./routes/teacherRoutes.js";
@@ -39,6 +40,9 @@ connectToDatabase()
 app.get("/api/health", (req, res) => {
     res.json({ status: "ok", message: "Server is running" })
 })
+
+// Login endpoint alias (convenience)
+app.post("/api/login", login)
 
 app.use("/api/auth", authRoutes)
 app.use("/api/students", studentRoutes);

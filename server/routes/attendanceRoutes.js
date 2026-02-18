@@ -114,7 +114,7 @@ router.post("/mark", authMiddleware, async (req, res) => {
 // GET /api/attendance
 // Query params: ?date=YYYY-MM-DD&class=5-A&section=A
 // Returns attendance doc for that date/class/section
-router.get("/", authMiddleware, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const { date, class: className, section } = req.query;
     if (!date || !className || !section) {
