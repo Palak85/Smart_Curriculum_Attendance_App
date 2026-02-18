@@ -117,6 +117,13 @@ router.post("/mark", authMiddleware, async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const { date, class: className, section } = req.query;
+    
+    // If no query params, return all attendance records
+    if (!date && !className && !section) {
+      const allAttendance = await Attendance.find().sort({ date: -1 }).limit(100);
+      return res.json({ success: true, attendance: allAttendance, message: "All attendance records (limit 100). Filter with ?date=&class=&section=" });
+    }
+    
     if (!date || !className || !section) {
       return res.status(400).json({ success: false, message: "Missing query params: date, class, section" });
     }
