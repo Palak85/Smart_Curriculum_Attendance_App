@@ -31,7 +31,7 @@ const TeacherAssignments = () => {
   const loadAssignments = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://localhost:3000/api/assignments/teacher', {
+      const res = await axios.get('https://smart-curriculum-attendance-app.onrender.com/api/assignments/teacher', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setAssignments(res.data.assignments);
@@ -42,7 +42,7 @@ const TeacherAssignments = () => {
 
   const loadClasses = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api/classes');
+      const res = await axios.get('https://smart-curriculum-attendance-app.onrender.com/api/classes');
       setClasses(res.data.classes);
     } catch (err) {
       console.error('Error loading classes:', err);
@@ -90,14 +90,14 @@ const TeacherAssignments = () => {
       }
 
       if (editingAssignment) {
-        await axios.put(`http://localhost:3000/api/assignments/teacher/${editingAssignment._id}`, formDataToSend, {
+        await axios.put(`https://smart-curriculum-attendance-app.onrender.com/api/assignments/teacher/${editingAssignment._id}`, formDataToSend, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
           }
         });
       } else {
-        await axios.post('http://localhost:3000/api/assignments/create', formDataToSend, {
+        await axios.post('https://smart-curriculum-attendance-app.onrender.com/api/assignments/create', formDataToSend, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
@@ -371,7 +371,7 @@ const TeacherAssignments = () => {
                   <div className="flex items-center gap-2 ml-4">
                     {assignment.fileUrl && (
                       <a
-                        href={`http://localhost:3000${assignment.fileUrl}`}
+                        href={`https://smart-curriculum-attendance-app.onrender.com/${assignment.fileUrl}`}
                         download
                         className="p-2 text-indigo-600 hover:bg-indigo-50 rounded"
                         title="Download"
