@@ -17,7 +17,7 @@ const ApplyLeave = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:3000/api/leaves/apply", {
+      const res = await axios.post("https://smart-curriculum-attendance-app.onrender.com/api/leaves/apply", {
         teacherName,
         teacherId,
         fromDate,
