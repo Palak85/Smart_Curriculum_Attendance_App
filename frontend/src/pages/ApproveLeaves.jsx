@@ -80,7 +80,7 @@ const ApproveLeaves = () => {
   // Fetch all leaves
   const fetchLeaves = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/leaves/all");
+      const res = await axios.get("https://smart-curriculum-attendance-app.onrender.com/api/leaves/all");
       if (res.data.success) setLeaves(res.data.leaves);
     } catch (error) {
       console.log(error);
@@ -96,7 +96,7 @@ const ApproveLeaves = () => {
   const updateStatus = async (id, status) => {
     try {
       const res = await axios.patch(
-        `http://localhost:3000/api/leaves/update/${id}`,
+        `https://smart-curriculum-attendance-app.onrender.com/api/leaves/update/${id}`,
         { status }
       );
 
