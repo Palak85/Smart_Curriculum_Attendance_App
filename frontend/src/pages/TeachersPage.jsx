@@ -26,7 +26,7 @@ export default function TeachersPage() {
 
   const loadTeachers = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/teachers");
+      const res = await axios.get("https://smart-curriculum-attendance-app.onrender.com/api/teachers");
       setTeachers(res.data.teachers);
     } catch (err) {
       console.error(err);
@@ -35,7 +35,7 @@ export default function TeachersPage() {
 
   const loadClasses = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/classes");
+      const res = await axios.get("https://smart-curriculum-attendance-app.onrender.com/api/classes");
       setClasses(res.data.classes);
     } catch (err) {
       console.error(err);
@@ -60,7 +60,7 @@ export default function TeachersPage() {
       return alert("All fields required!");
 
     try {
-      await axios.post("http://localhost:3000/api/teachers/add", formData);
+      await axios.post("https://smart-curriculum-attendance-app.onrender.com/api/teachers/add", formData);
       setFormData({ name: "", subject: "", class: "", section: "" });
       loadTeachers();
     } catch (err) {
@@ -69,7 +69,7 @@ export default function TeachersPage() {
   };
 
   const deleteTeacher = async (id) => {
-    await axios.delete(`http://localhost:3000/api/teachers/${id}`);
+    await axios.delete(`https://smart-curriculum-attendance-app.onrender.com/api/teachers/${id}`);
     loadTeachers();
   };
 
@@ -90,7 +90,7 @@ export default function TeachersPage() {
 
   const updateTeacher = async () => {
     await axios.put(
-      `http://localhost:3000/api/teachers/${editingTeacher._id}`,
+      `https://smart-curriculum-attendance-app.onrender.com/api/teachers/${editingTeacher._id}`,
       formData
     );
     setEditingTeacher(null);
