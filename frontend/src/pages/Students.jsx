@@ -274,7 +274,7 @@ export default function Students() {
 
   const loadStudents = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/students");
+      const res = await axios.get("https://smart-curriculum-attendance-app.onrender.com/api/students");
       setStudents(res.data.students);
     } catch (err) {
       console.error(err);
@@ -283,7 +283,7 @@ export default function Students() {
 
   const loadClasses = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/classes");
+      const res = await axios.get("https://smart-curriculum-attendance-app.onrender.com/api/classes");
       setClasses(res.data.classes);
     } catch (err) {
       console.error(err);
@@ -307,7 +307,7 @@ export default function Students() {
       return alert("Name, roll, class, section, email and password are required");
 
     try {
-      await axios.post("http://localhost:3000/api/students/add", formData);
+      await axios.post("https://smart-curriculum-attendance-app.onrender.com/api/students/add", formData);
       setFormData({ name: "", roll: "", class: "", section: "", email: "", password: "" });
       loadStudents();
     } catch (err) {
@@ -318,7 +318,7 @@ export default function Students() {
 
   const deleteStudent = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/api/students/${id}`);
+      await axios.delete(`https://smart-curriculum-attendance-app.onrender.com/api/students/${id}`);
       loadStudents();
     } catch (err) {
       console.error(err);
@@ -344,7 +344,7 @@ export default function Students() {
   const updateStudent = async () => {
     try {
       await axios.put(
-        `http://localhost:3000/api/students/${editingStudent._id}`,
+        `https://smart-curriculum-attendance-app.onrender.com/api/students/${editingStudent._id}`,
         formData
       );
 
