@@ -22,9 +22,9 @@ export default function AdminDashboard() {
     try {
       setLoading(true)
       const [studentsRes, teachersRes, classesRes] = await Promise.all([
-        axios.get('http://localhost:3000/api/students'),
-        axios.get('http://localhost:3000/api/teachers'),
-        axios.get('http://localhost:3000/api/classes')
+        axios.get('https://smart-curriculum-attendance-app.onrender.com/api/students'),
+        axios.get('https://smart-curriculum-attendance-app.onrender.com/api/teachers'),
+        axios.get('https://smart-curriculum-attendance-app.onrender.com//api/classes')
       ])
 
       setStats({
