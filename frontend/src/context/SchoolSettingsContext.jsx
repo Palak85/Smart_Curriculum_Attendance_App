@@ -7,7 +7,7 @@ export const SchoolSettingsProvider = ({ children }) => {
   const [settings, setSettings] = useState(null);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/api/admin/settings/general")
+    axios.get("https://smart-curriculum-attendance-app.onrender.com/api/admin/settings/general")
       .then(res => setSettings(res.data))
       .catch(err => console.log(err));
   }, []);
