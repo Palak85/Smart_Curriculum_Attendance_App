@@ -10,7 +10,7 @@ const StudentGrades = () => {
     const loadGrades = async () => {
       try {
         const token = localStorage.getItem('token')
-        const res = await axios.get('http://localhost:3000/api/grades/student', {
+        const res = await axios.get('https://smart-curriculum-attendance-app.onrender.com/api/grades/student', {
           headers: { Authorization: `Bearer ${token}` }
         })
         setGrades(res.data.grades || [])
