@@ -172,7 +172,7 @@ export default function ClassesSections() {
 
   const loadClasses = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/classes");
+      const res = await axios.get("https://smart-curriculum-attendance-app.onrender.com/api/classes");
       setClasses(res.data.classes);
     } catch (err) {
       console.error("Error loading classes:", err);
@@ -183,7 +183,7 @@ export default function ClassesSections() {
     if (!newClass.trim()) return;
 
     try {
-      await axios.post("http://localhost:3000/api/classes/add", {
+      await axios.post("https://smart-curriculum-attendance-app.onrender.com/api/classes/add", {
         className: newClass,
       });
 
@@ -198,7 +198,7 @@ export default function ClassesSections() {
     if (!newSection.trim()) return;
 
     try {
-      await axios.post(`http://localhost:3000/api/classes/${classId}/section`, {
+      await axios.post(`https://smart-curriculum-attendance-app.onrender.com/api/classes/${classId}/section`, {
         section: newSection,
       });
 
@@ -212,7 +212,7 @@ export default function ClassesSections() {
 
   const deleteSection = async (classId, section) => {
     try {
-      await axios.delete(`http://localhost:3000/api/classes/${classId}/section/${section}`);
+      await axios.delete(`https://smart-curriculum-attendance-app.onrender.com/api/classes/${classId}/section/${section}`);
 
 
       loadClasses();
@@ -223,7 +223,7 @@ export default function ClassesSections() {
 
   const deleteClass = async (classId) => {
     try {
-      await axios.delete(`http://localhost:3000/api/classes/${classId}`);
+      await axios.delete(`https://smart-curriculum-attendance-app.onrender.com/api/classes/${classId}`);
       loadClasses();
     } catch (err) {
       console.error("Error deleting class:", err);
