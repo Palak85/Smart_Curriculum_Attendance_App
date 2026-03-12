@@ -8,7 +8,7 @@ const CheckLeaveStatus = () => {
 
   const fetchLeaves = async (id) => {
     try {
-      const res = await axios.get(`http://localhost:3000/api/leaves/my-leaves/${id}`);
+      const res = await axios.get(`https://smart-curriculum-attendance-app.onrender.com/api/leaves/my-leaves/${id}`);
       setLeaves(res.data.leaves);
     } catch (error) {
       setMessage(error.response?.data?.message || "Error fetching leaves");
