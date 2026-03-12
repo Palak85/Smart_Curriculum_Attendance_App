@@ -40,7 +40,7 @@ const TeacherGrades = () => {
 
   const loadClasses = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api/classes')
+      const res = await axios.get('https://smart-curriculum-attendance-app.onrender.com/api/classes')
       setClasses(res.data.classes || [])
     } catch (err) {
       console.error('Load classes error', err)
@@ -54,7 +54,7 @@ const TeacherGrades = () => {
     }
     try {
       setLoadingStudents(true)
-      const res = await axios.get('http://localhost:3000/api/students')
+      const res = await axios.get('https://smart-curriculum-attendance-app.onrender.com/api/students')
       const list = (res.data.students || []).filter(
         s => s.class === filters.class && s.section === filters.section
       )
@@ -71,7 +71,7 @@ const TeacherGrades = () => {
   const loadGrades = async () => {
     try {
       const token = localStorage.getItem('token')
-      const res = await axios.get('http://localhost:3000/api/grades/teacher', {
+      const res = await axios.get('https://smart-curriculum-attendance-app.onrender.com/api/grades/teacher', {
         headers: { Authorization: `Bearer ${token}` }
       })
       setGrades(res.data.grades || [])
@@ -88,7 +88,7 @@ const TeacherGrades = () => {
     try {
       setSaving(true)
       const token = localStorage.getItem('token')
-      await axios.post('http://localhost:3000/api/grades', form, {
+      await axios.post('https://smart-curriculum-attendance-app.onrender.com/api/grades', form, {
         headers: { Authorization: `Bearer ${token}` }
       })
       setMessage('Grade saved')
