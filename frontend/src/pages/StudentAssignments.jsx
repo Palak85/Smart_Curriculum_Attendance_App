@@ -19,7 +19,7 @@ const StudentAssignments = () => {
       const token = localStorage.getItem('token');
       // In a real app, you'd filter by student's class and section
       // For now, we'll get all assignments
-      const res = await axios.get('http://localhost:3000/api/assignments/student', {
+      const res = await axios.get('https://smart-curriculum-attendance-app.onrender.com/api/assignments/student', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setAssignments(res.data.assignments);
@@ -34,7 +34,7 @@ const StudentAssignments = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `http://localhost:3000/api/assignments/download/${assignment._id}`,
+        `https://smart-curriculum-attendance-app.onrender.com/api/assignments/download/${assignment._id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
           responseType: 'blob'
