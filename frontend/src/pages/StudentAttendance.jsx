@@ -18,7 +18,7 @@ export default function StudentAttendance() {
       setMessage("");
       const token = localStorage.getItem("token"); // adjust if you store token differently
 
-      const res = await axios.get("http://localhost:3000/api/attendance/student", {
+      const res = await axios.get("https://smart-curriculum-attendance-app.onrender.com/api/attendance/student", {
         headers: { Authorization: `Bearer ${token}` }
       });
 
