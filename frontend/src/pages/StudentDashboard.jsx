@@ -24,7 +24,7 @@ const StudentDashboard = () => {
           setLoading(false)
           return
         }
-        const res = await axios.get('http://localhost:3000/api/students/me', {
+        const res = await axios.get('https://smart-curriculum-attendance-app.onrender.com/api/students/me', {
           headers: { Authorization: `Bearer ${token}` }
         })
         if (res.data.success && res.data.student) {
