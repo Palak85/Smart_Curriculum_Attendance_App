@@ -25,9 +25,12 @@ const app = express()
 
 // ✅ CORS FIX
 app.use(cors({
-    origin: "http://localhost:5173",
-    credentials: true
-}))
+  origin: [
+    "http://localhost:5173",
+    "https://smart-curriculum-attendance-app-1.onrender.com"
+  ],
+  credentials: true
+}));
 
 app.use(express.json())
 
