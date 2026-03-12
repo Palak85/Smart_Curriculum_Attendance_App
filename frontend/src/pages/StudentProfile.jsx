@@ -254,7 +254,7 @@ export default function StudentProfile() {
         setLoading(true);
         setError("");
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:3000/api/students/me", {
+        const res = await axios.get("https://smart-curriculum-attendance-app.onrender.com/api/students/me", {
           headers: token ? { Authorization: `Bearer ${token}` } : {}
         });
 
