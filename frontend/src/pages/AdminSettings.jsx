@@ -25,7 +25,7 @@ const AdminSettings = () => {
     const loadSettings = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3000/api/admin/settings/general"
+          "https://smart-curriculum-attendance-app.onrender.com/api/admin/settings/general"
         );
         const data = res.data;
         setForm({
@@ -52,7 +52,7 @@ const AdminSettings = () => {
       setMessage("");
 
       await axios.put(
-        "http://localhost:3000/api/admin/settings/general",
+        "https://smart-curriculum-attendance-app.onrender.com/api/admin/settings/general",
         form,
         {
           headers: {
