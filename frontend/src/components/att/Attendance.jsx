@@ -94,7 +94,7 @@ const Attendance = () => {
         status: attendance[s._id] || "Absent",
       }));
       const res = await axios.post(
-        "http://localhost:3000/api/attendance/mark",
+        "https://smart-curriculum-attendance-app.onrender.com/api/attendance/mark",
         {
           date,
           class: form.class,
