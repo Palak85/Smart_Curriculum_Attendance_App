@@ -29,6 +29,7 @@ app.use(cors({
     "http://localhost:5173",
     "https://smart-curriculum-attendance-app-1.onrender.com"
   ],
+  methods: ["GET","POST","PUT","DELETE"],
   credentials: true
 }));
 
