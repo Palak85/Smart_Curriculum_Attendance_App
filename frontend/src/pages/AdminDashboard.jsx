@@ -24,7 +24,7 @@ export default function AdminDashboard() {
       const [studentsRes, teachersRes, classesRes] = await Promise.all([
         axios.get('https://smart-curriculum-attendance-app.onrender.com/api/students'),
         axios.get('https://smart-curriculum-attendance-app.onrender.com/api/teachers'),
-        axios.get('https://smart-curriculum-attendance-app.onrender.com//api/classes')
+        axios.get('https://smart-curriculum-attendance-app.onrender.com/api/classes')
       ])
 
       setStats({
