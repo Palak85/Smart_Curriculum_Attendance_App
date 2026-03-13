@@ -28,7 +28,7 @@ const Attendance = () => {
 
   const loadClasses = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/classes");
+      const res = await axios.get("https://smart-curriculum-attendance-app.onrender.com/api/classes");
       setClasses(res.data.classes || []);
     } catch (err) {
       console.error("Error loading classes", err);
@@ -43,7 +43,7 @@ const Attendance = () => {
     try {
       setLoading(true);
       setMessage("");
-      const res = await axios.get("http://localhost:3000/api/students");
+      const res = await axios.get("https://smart-curriculum-attendance-app.onrender.com/api/students");
       const filtered = (res.data.students || []).filter(
         (s) => s.class === form.class && s.section === form.section
       );
